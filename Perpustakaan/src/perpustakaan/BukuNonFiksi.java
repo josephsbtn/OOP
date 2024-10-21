@@ -4,8 +4,8 @@ public class BukuNonFiksi extends Buku {
 
     private String topik;
 
-    public BukuNonFiksi(String judul, String Pengarang, int tahunTerbit, String topik) {
-        super(judul, Pengarang, tahunTerbit);
+    public BukuNonFiksi(String Judul, String Pengarang, int tahunTerbit, String topik, double dendaPerHari, int stock) {
+        super(Judul, Pengarang, tahunTerbit, dendaPerHari, stock);
         this.topik = topik;
     }
 

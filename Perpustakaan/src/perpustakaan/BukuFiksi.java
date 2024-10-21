@@ -4,8 +4,8 @@ public class BukuFiksi extends Buku {
 
     private String genre;
 
-    public BukuFiksi(String judul, String Pengarang, int tahunTerbit, String genre) {
-        super(judul, Pengarang, tahunTerbit);
+    public BukuFiksi(String Judul, String Pengarang, int tahunTerbit, String genre, double dendaPerHari, int stock) {
+        super(Judul, Pengarang, tahunTerbit, dendaPerHari, stock);
         this.genre = genre;
     }
 
@@ -13,10 +13,9 @@ public class BukuFiksi extends Buku {
     public void tampilkanInformasi() {
         super.tampilkanInformasi();
         System.out.println("Genre : " + this.genre);
-        System.out.println("------------------------");
     }
 
-    public String getGenre() {
+    public String getGenre() {;
         return genre;
     }
 

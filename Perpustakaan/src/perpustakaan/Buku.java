@@ -45,6 +45,7 @@ public class Buku {
         System.out.println("Book title : " + this.Judul);
         System.out.println("Writer : " + this.Pengarang);
         System.out.println("Year of Publication : " + this.tahunTerbit);
+        System.out.println("Stock : " + this.stock);
     }
 
     public int getStock() {
@@ -57,9 +58,5 @@ public class Buku {
 
     public double getDendaPerHari() {
         return dendaPerHari;
-    }
-
-    public void setDendaPerHari(int hariTelat) {
-        this.dendaPerHari = this.dendaPerHari * hariTelat;
     }
 }

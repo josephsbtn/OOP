@@ -6,7 +6,8 @@ public class User {
 
     private String nama;
     private int nomorAnggota;
-    private ArrayList<Buku> listPinjam = new ArrayList<Buku>();
+    private double denda = 0;
+    private ArrayList<Object> listPinjam = new ArrayList<Object>();
 
     public User(String nama, int nomorAnggota) {
         this.nama = nama;
@@ -29,15 +30,23 @@ public class User {
         this.nomorAnggota = nomorAnggota;
     }
 
-    public void addPinjam(Buku pinjam) {
+    public void addPinjam(BukuFiksi pinjam) {
         listPinjam.add(pinjam);
     }
 
-    public ArrayList<Buku> getListPinjam() {
+    public void addPinjam(BukuNonFiksi pinjam) {
+        listPinjam.add(pinjam);
+    }
+
+    public ArrayList<Object> getListPinjam() {
         return listPinjam;
     }
 
     public void deletePinjam(Buku pinjam) {
         listPinjam.remove(pinjam);
+    }
+
+    public void setDenda(int hari, double dendaPerHari) {
+        this.denda = hari * dendaPerHari;
     }
 }

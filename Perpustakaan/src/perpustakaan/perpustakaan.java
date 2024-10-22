@@ -28,14 +28,36 @@ public class perpustakaan {
     }
 
     public void pinjamBuku(User user) {
+        boolean found = false;
         System.out.println("---- BORROW BOOK -----");
         System.out.println("Title Book :");
         String title = scanner.nextLine();
         for (Object buku : Koleksi) {
-            if (Koleksi.contains(buku.equals(title)) && buku instanceof BukuFiksi) {
-                user.addPinjam((BukuFiksi) buku);
-                break;
+            //Checking by Buku Fiksi in Collection
+            if (buku instanceof BukuFiksi) {
+                BukuFiksi book = (BukuFiksi) buku;
+                if (book.getJudul().equalsIgnoreCase(title)) {
+                    user.addPinjam(book);
+                    book.tampilkanInformasi();
+                    book.setBorrowedStock();
+                    found = true;
+                    break;
+                }
+                //Checking by Buku NonFiksi in Collection
+            } else if (buku instanceof BukuNonFiksi) {
+                BukuNonFiksi book = (BukuNonFiksi) buku;
+                if (book.getJudul().equalsIgnoreCase(title)) {
+                    user.addPinjam(book);
+                    book.tampilkanInformasi();
+                    book.setBorrowedStock();
+                    found = true;
+                    break;
+                }
             }
+        }
+
+        if (!found) {
+            System.out.println("BOOK NOT FOUND");
         }
 
     }

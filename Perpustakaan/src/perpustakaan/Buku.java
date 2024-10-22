@@ -52,8 +52,8 @@ public class Buku {
         return stock;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setBorrowedStock() {
+        this.stock -= 1;
     }
 
     public double getDendaPerHari() {

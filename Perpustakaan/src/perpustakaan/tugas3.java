@@ -51,10 +51,11 @@ public class tugas3 {
             System.out.flush();
             System.out.println("-- PERPUSTAKAAN --");
             System.out.println("Hai " + user.getNama());
-            System.out.println("1. Display Collection");
-            System.out.println("2. Pinjam Buku");
-            System.out.println("3. Kembalikan Buku");
-            System.out.println("4. Exit");
+            System.out.println("1. My Book");
+            System.out.println("2. Display Collection");
+            System.out.println("3. Pinjam Buku");
+            System.out.println("4. Kembalikan Buku");
+            System.out.println("5. Exit");
             while (true) {
 
                 try {
@@ -68,10 +69,14 @@ public class tugas3 {
 
             switch (choice) {
                 case 1:
-                    perpus.displayBook();
+
                     break;
                 case 2:
+                    perpus.displayBook();
+                    break;
+                case 3:
                     perpus.pinjamBuku(user);
+                    scanner.next();
                 default:
                     break;
             }

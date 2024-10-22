@@ -49,4 +49,15 @@ public class User {
     public void setDenda(int hari, double dendaPerHari) {
         this.denda = hari * dendaPerHari;
     }
+
+    public void borrowedBook() {
+        System.out.println("-- My Borrowed Book Collection --");
+        for (Object buku : listPinjam) {
+            if (buku instanceof BukuFiksi) {
+                ((BukuFiksi) buku).tampilkanInformasi();
+            } else if (buku instanceof BukuNonFiksi) {
+                ((BukuNonFiksi) buku).tampilkanInformasi();
+            }
+        }
+    }
 }

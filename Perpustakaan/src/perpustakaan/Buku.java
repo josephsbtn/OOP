@@ -10,6 +10,7 @@ public class Buku {
     protected double denda = 0;
     protected int tanggalPinjam = 0;
     protected int tanggalKembali = 0;
+    protected int deadlineReturn = 0;
 
     public Buku(String judul, String Pengarang, int tahunTerbit, double dendaPerHari, int stock) {
         this.Judul = judul;
@@ -67,7 +68,32 @@ public class Buku {
         return dendaPerHari;
     }
 
-    public void setDenda() {
+    public void setTanggalPinjam(int tanggalPinjam) {
+        this.tanggalPinjam = tanggalPinjam;
+    }
+
+    public void setTanggalKembali(int tanggalKembali) {
+        this.tanggalKembali = tanggalKembali;
+    }
+
+    public void setDeadlineReturn(int deadlineReturn) {
+        this.deadlineReturn = deadlineReturn;
+    }
+
+    public int getTanggalPinjam() {
+        return tanggalPinjam;
+    }
+
+    public int getTanggalKembali() {
+        return tanggalKembali;
+    }
+
+    public int getDeadlineReturn() {
+        return deadlineReturn;
+    }
+
+    public double setDenda() {
         this.denda = (this.tanggalKembali - this.tanggalPinjam) * this.dendaPerHari;
+        return this.denda;
     }
 }

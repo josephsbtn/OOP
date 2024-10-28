@@ -3,14 +3,16 @@ package perpustakaan;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.function.Function;
 
 public class perpustakaan {
 
     private ArrayList<Object> Koleksi = new ArrayList<Object>();
     Scanner scanner = new Scanner(System.in);
-    private BukuFiksi fictionBook = null;
+    private Buku Book = null;
     private int borrowDate;
     private int returnDate;
+    private int deadlineReturn;
 
     public void tambahBuku(BukuFiksi buku) {
         Koleksi.add(buku);
@@ -41,46 +43,55 @@ public class perpustakaan {
         String title = scanner.nextLine();
         for (Object buku : Koleksi) {
             if (buku instanceof BukuFiksi) {
-                fictionBook = (BukuFiksi) buku;
-                if (fictionBook.getJudul().equalsIgnoreCase(title)) {
-                    if (fictionBook.getStock() == 0) {
+                BukuFiksi book = (BukuFiksi) buku;
+                if (book.getJudul().equalsIgnoreCase(title)) {
+                    if (book.getStock() == 0) {
                         System.out.println(("----ALERT----"));
                         System.out.println("Book is out of stock");
                         return;
                     }
-
-                    try {
-                        System.out.println("Borrowing Date : ");
-                        borrowDate = scanner.nextInt();
-                        if (borrowDate < 1 || borrowDate > 31) {
-                            throw new InputMismatchException("INVALID INPUT DATE ( 1 - 31)");
-                        }
-                    } catch (InputMismatchException e) {
-
-                    }
-
-                    user.addPinjam(fictionBook);
-                    fictionBook.tampilkanInformasi();
-                    fictionBook.setBorrowStock();
+                    int date = BorrowDate();
+                    deadlineReturn = date + 7;
+                    book.setTanggalPinjam(date);
+                    book.setDeadlineReturn(deadlineReturn);
+                    user.addPinjam(book);
+                    System.out.print("\033[H\033[2J");
+                    System.out.flush();
+                    System.out.println("---- SUCCESSFULLY BORROWED ----");
+                    System.out.println();
+                    book.tampilkanInformasi();
+                    System.out.println("Deadline Return : " + deadlineReturn);
+                    book.setBorrowStock();
                     found = true;
                     break;
                 }
             } else if (buku instanceof BukuNonFiksi) {
                 BukuNonFiksi book = (BukuNonFiksi) buku;
                 if (book.getJudul().equalsIgnoreCase(title)) {
+                    if (book.getStock() == 0) {
+                        System.out.println(("----ALERT----"));
+                        System.out.println("Book is out of stock");
+                        return;
+                    }
+                    int date = BorrowDate();
+                    deadlineReturn = date + 7;
+                    book.setTanggalPinjam(date);
+                    book.setDeadlineReturn(deadlineReturn);
                     user.addPinjam(book);
+                    System.out.println("---- SUCCESSFULLY BORROWED ----");
+                    System.out.println();
                     book.tampilkanInformasi();
+                    System.out.println("Deadline Return : " + deadlineReturn);
                     book.setBorrowStock();
                     found = true;
                     break;
                 }
             }
-        }
 
+        }
         if (!found) {
             System.out.println("BOOK NOT FOUND");
         }
-
     }
 
     public void kembalikanBuku(User user) {
@@ -94,7 +105,8 @@ public class perpustakaan {
             if (buku instanceof BukuFiksi) {
                 BukuFiksi book = (BukuFiksi) buku;
                 if (book.getJudul().equalsIgnoreCase(title)) {
-
+                    int date = ReturnDate();
+                    book.setTanggalKembali(date);
                     user.deletePinjam(book);
                     book.tampilkanInformasi();
                     book.setBorrowedStock();
@@ -104,6 +116,12 @@ public class perpustakaan {
             } else if (buku instanceof BukuNonFiksi) {
                 BukuNonFiksi book = (BukuNonFiksi) buku;
                 if (book.getJudul().equalsIgnoreCase(title)) {
+                    int date = ReturnDate();
+
+                    book.setTanggalKembali(date);
+                    if (date > deadlineReturn) {
+                        book.setDenda();
+                    }
                     user.deletePinjam(book);
                     book.tampilkanInformasi();
                     book.setBorrowedStock();
@@ -123,4 +141,35 @@ public class perpustakaan {
 
         return denda;
     }
+
+    private int BorrowDate() {
+        try {
+            System.out.println("Borrowing Date : ");
+            borrowDate = scanner.nextInt();
+            if (borrowDate < 1 || borrowDate > 31) {
+                throw new InputMismatchException();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("INVALID INPUT DATE ( 1 - 31)");
+            System.out.println("Borrowing Date : ");
+            scanner.next();
+        }
+        return borrowDate;
+    }
+
+    private int ReturnDate() {
+        try {
+            System.out.println("Return Date : ");
+            returnDate = scanner.nextInt();
+            if (returnDate > borrowDate && (returnDate < 1 || returnDate > 31)) {
+                throw new InputMismatchException();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("INVALID INPUT DATE ( 1 - 31)");
+            System.out.println("Return Date : ");
+            scanner.next();
+        }
+        return returnDate;
+    }
+
 }

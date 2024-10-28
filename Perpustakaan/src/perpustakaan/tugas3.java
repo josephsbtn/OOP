@@ -80,7 +80,10 @@ public class tugas3 {
                     break;
                 case 3:
                     perpus.pinjamBuku(user);
-                    scanner.next();
+                    scanner.nextLine();
+                case 5:
+                    exit();
+                    break;
                 default:
                     System.out.println("Choice not avaiable");
                     break;

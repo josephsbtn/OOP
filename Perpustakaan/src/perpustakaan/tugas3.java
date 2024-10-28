@@ -46,7 +46,7 @@ public class tugas3 {
         System.out.flush();
 
         int choice = 0;
-        while (choice != 4) {
+        while (choice != 5) {
             System.out.print("\033[H\033[2J");
             System.out.flush();
             System.out.println("-- PERPUSTAKAAN --");
@@ -59,6 +59,7 @@ public class tugas3 {
             while (true) {
 
                 try {
+                    System.out.print("Choice : ");
                     choice = scanner.nextInt();
                     break;
                 } catch (InputMismatchException e) {
@@ -69,15 +70,19 @@ public class tugas3 {
 
             switch (choice) {
                 case 1:
+                    user.printBorrowedBook();
+                    scanner.nextLine();
 
                     break;
                 case 2:
                     perpus.displayBook();
+                    scanner.nextLine();
                     break;
                 case 3:
                     perpus.pinjamBuku(user);
                     scanner.next();
                 default:
+                    System.out.println("Choice not avaiable");
                     break;
             }
 

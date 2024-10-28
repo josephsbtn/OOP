@@ -1,12 +1,12 @@
 package perpustakaan;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class User {
 
     private String nama;
     private int nomorAnggota;
-    private double denda = 0;
     private ArrayList<Object> listPinjam = new ArrayList<Object>();
 
     public User(String nama, int nomorAnggota) {
@@ -46,12 +46,16 @@ public class User {
         listPinjam.remove(pinjam);
     }
 
-    public void setDenda(int hari, double dendaPerHari) {
-        this.denda = hari * dendaPerHari;
-    }
+    public void printBorrowedBook() {
+        Scanner pause = new Scanner(System.in);
+        System.out.println("---- My Borrowed Book Collection ----");
 
-    public void borrowedBook() {
-        System.out.println("-- My Borrowed Book Collection --");
+        if (listPinjam.isEmpty()) {
+            System.out.println("You dont have any borrowed book yet");
+            pause.nextLine();
+            return;
+        }
+
         for (Object buku : listPinjam) {
             if (buku instanceof BukuFiksi) {
                 ((BukuFiksi) buku).tampilkanInformasi();
@@ -59,5 +63,6 @@ public class User {
                 ((BukuNonFiksi) buku).tampilkanInformasi();
             }
         }
+        pause.nextLine();
     }
 }

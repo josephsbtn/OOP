@@ -2,11 +2,14 @@ package perpustakaan;
 
 public class Buku {
 
-    private String Judul;
-    private String Pengarang;
-    private int tahunTerbit;
-    private int stock;
-    private double dendaPerHari;
+    protected String Judul;
+    protected String Pengarang;
+    protected int tahunTerbit;
+    protected int stock;
+    protected double dendaPerHari;
+    protected double denda = 0;
+    protected int tanggalPinjam = 0;
+    protected int tanggalKembali = 0;
 
     public Buku(String judul, String Pengarang, int tahunTerbit, double dendaPerHari, int stock) {
         this.Judul = judul;
@@ -53,10 +56,18 @@ public class Buku {
     }
 
     public void setBorrowedStock() {
+        this.stock += 1;
+    }
+
+    public void setBorrowStock() {
         this.stock -= 1;
     }
 
     public double getDendaPerHari() {
         return dendaPerHari;
+    }
+
+    public void setDenda() {
+        this.denda = (this.tanggalKembali - this.tanggalPinjam) * this.dendaPerHari;
     }
 }

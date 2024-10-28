@@ -25,18 +25,19 @@ public class tugas3 {
 
         Scanner scanner = new Scanner(System.in);
 
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        System.out.println("-- LIBRARY --");
+        System.out.print("Name : ");
+        nama = scanner.nextLine().toUpperCase();
         while (true) {
             try {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-                System.out.println("-- PERPUSTAKAAN --");
-                System.out.print("nama : ");
-                nama = scanner.nextLine().toUpperCase();
-                System.out.print("Nomot anggota : ");
+                System.out.print("Member ID : ");
                 nomorAnggota = scanner.nextInt();
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Kesalaahan Input!!");
+                scanner.nextLine();
             }
         }
 
@@ -49,7 +50,7 @@ public class tugas3 {
         while (choice != 5) {
             System.out.print("\033[H\033[2J");
             System.out.flush();
-            System.out.println("-- PERPUSTAKAAN --");
+            System.out.println("-- LIBRARY --");
             System.out.println("Hai " + user.getNama());
             System.out.println("1. My Book");
             System.out.println("2. Display Collection");
@@ -82,7 +83,6 @@ public class tugas3 {
                     perpus.pinjamBuku(user);
                     scanner.nextLine();
                 case 5:
-                    exit();
                     break;
                 default:
                     System.out.println("Choice not avaiable");

@@ -37,7 +37,12 @@ public class perpustakaan {
     }
 
     public void pinjamBuku(User user) {
+        Scanner pause = new Scanner(System.in);
         boolean found = false;
+        while (!found) {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+        }
         System.out.println("---- BORROW BOOK -----");
         System.out.println("Title Book :");
         String title = scanner.nextLine();
@@ -92,10 +97,16 @@ public class perpustakaan {
         if (!found) {
             System.out.println("BOOK NOT FOUND");
         }
+        pause.nextLine();
     }
 
     public void kembalikanBuku(User user) {
+        Scanner pause = new Scanner(System.in);
         boolean found = false;
+        while (!found) {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+        }
         System.out.println("---- RETURN BOOK -----");
         System.out.println("Title Book :");
         String title = scanner.nextLine();
@@ -134,12 +145,7 @@ public class perpustakaan {
             System.out.println("----ALERT----");
             System.out.println("BOOK NOT FOUND");
         }
-    }
-
-    private double hitungDenda(Object buku) {
-        double denda = 0;
-
-        return denda;
+        pause.nextLine();
     }
 
     private int BorrowDate() {
@@ -170,6 +176,26 @@ public class perpustakaan {
             scanner.next();
         }
         return returnDate;
+    }
+
+    private void paymnentDenda(double denda) {
+        double payment = 0;
+        double change = 0;
+        while (payment < denda) {
+            System.out.println("---- PENALTY PAYMENT ----");
+            System.out.println("Penalty : " + denda);
+            System.out.println("Money : ");
+            payment = scanner.nextDouble();
+            if (payment < denda) {
+                System.out.println("MONEY NOT ENOUGH");
+            } else if (payment > denda) {
+                change = payment - denda;
+                System.out.println("---- PAYMENT SUCCESSFUL ----");
+                System.out.println("Money Change : " + change);
+            } else {
+                System.out.println("---- PAYMENT SUCCESSFUL ----");
+            }
+        }
     }
 
 }

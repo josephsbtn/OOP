@@ -3,7 +3,6 @@ package perpustakaan;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.function.Function;
 
 public class perpustakaan {
 
@@ -25,7 +24,7 @@ public class perpustakaan {
     public void displayBook() {
         Scanner pause = new Scanner(System.in);
 
-        System.out.println("-- Book Collection --");
+        System.out.println("|------ Book Collection ------|");
         for (Object buku : Koleksi) {
             if (buku instanceof BukuFiksi) {
                 ((BukuFiksi) buku).tampilkanInformasi();
@@ -39,111 +38,144 @@ public class perpustakaan {
     public void pinjamBuku(User user) {
         Scanner pause = new Scanner(System.in);
         boolean found = false;
-        while (!found) {
+        char another = 'Y';
+        while (!found && another == 'Y') {
+
             System.out.print("\033[H\033[2J");
             System.out.flush();
-        }
-        System.out.println("---- BORROW BOOK -----");
-        System.out.println("Title Book :");
-        String title = scanner.nextLine();
-        for (Object buku : Koleksi) {
-            if (buku instanceof BukuFiksi) {
-                BukuFiksi book = (BukuFiksi) buku;
-                if (book.getJudul().equalsIgnoreCase(title)) {
-                    if (book.getStock() == 0) {
-                        System.out.println(("----ALERT----"));
-                        System.out.println("Book is out of stock");
-                        return;
-                    }
-                    int date = BorrowDate();
-                    deadlineReturn = date + 7;
-                    book.setTanggalPinjam(date);
-                    book.setDeadlineReturn(deadlineReturn);
-                    user.addPinjam(book);
-                    System.out.print("\033[H\033[2J");
-                    System.out.flush();
-                    System.out.println("---- SUCCESSFULLY BORROWED ----");
-                    System.out.println();
-                    book.tampilkanInformasi();
-                    System.out.println("Deadline Return : " + deadlineReturn);
-                    book.setBorrowStock();
-                    found = true;
-                    break;
-                }
-            } else if (buku instanceof BukuNonFiksi) {
-                BukuNonFiksi book = (BukuNonFiksi) buku;
-                if (book.getJudul().equalsIgnoreCase(title)) {
-                    if (book.getStock() == 0) {
-                        System.out.println(("----ALERT----"));
-                        System.out.println("Book is out of stock");
-                        return;
-                    }
-                    int date = BorrowDate();
-                    deadlineReturn = date + 7;
-                    book.setTanggalPinjam(date);
-                    book.setDeadlineReturn(deadlineReturn);
-                    user.addPinjam(book);
-                    System.out.println("---- SUCCESSFULLY BORROWED ----");
-                    System.out.println();
-                    book.tampilkanInformasi();
-                    System.out.println("Deadline Return : " + deadlineReturn);
-                    book.setBorrowStock();
-                    found = true;
-                    break;
-                }
-            }
 
+            System.out.println("---- BORROW BOOK -----");
+            System.out.println("Title Book :");
+            String title = scanner.nextLine();
+            for (Object buku : Koleksi) {
+                if (buku instanceof BukuFiksi) {
+                    BukuFiksi book = (BukuFiksi) buku;
+                    if (book.getJudul().equalsIgnoreCase(title)) {
+                        if (book.getStock() == 0) {
+                            System.out.println(("----ALERT----"));
+                            System.out.println("Book is out of stock");
+                            return;
+                        }
+                        int date = BorrowDate();
+                        deadlineReturn = date + 7;
+                        book.setTanggalPinjam(date);
+                        book.setDeadlineReturn(deadlineReturn);
+                        user.addPinjam(book);
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
+                        System.out.println("---- SUCCESSFULLY BORROWED ----");
+                        System.out.println();
+                        book.tampilkanInformasi();
+                        System.out.println("Deadline Return : " + deadlineReturn);
+                        book.setBorrowStock();
+                        found = true;
+                        break;
+                    }
+                } else if (buku instanceof BukuNonFiksi) {
+                    BukuNonFiksi book = (BukuNonFiksi) buku;
+                    if (book.getJudul().equalsIgnoreCase(title)) {
+                        if (book.getStock() == 0) {
+                            System.out.println(("----ALERT----"));
+                            System.out.println("Book is out of stock");
+                            return;
+                        }
+                        int date = BorrowDate();
+                        deadlineReturn = date + 7;
+                        book.setTanggalPinjam(date);
+                        book.setDeadlineReturn(deadlineReturn);
+                        user.addPinjam(book);
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
+                        System.out.println("---- SUCCESSFULLY BORROWED ----");
+                        System.out.println();
+                        book.tampilkanInformasi();
+                        System.out.println("Deadline Return : " + deadlineReturn);
+                        book.setBorrowStock();
+                        found = true;
+                        break;
+                    }
+                }
+
+            }
+            System.out.println("CHECK FOUND BOOK" + found);
+            if (!found) {
+                System.out.println("----ALERT----");
+                System.out.println("BOOK NOT FOUND");
+                System.out.println("Want to find another book? (Y/N)");
+                another = scanner.nextLine().toUpperCase().charAt(0);
+            } else {
+                pause.nextLine();
+                return;
+            }
         }
-        if (!found) {
-            System.out.println("BOOK NOT FOUND");
-        }
+
         pause.nextLine();
     }
 
     public void kembalikanBuku(User user) {
         Scanner pause = new Scanner(System.in);
         boolean found = false;
-        while (!found) {
+        char another = 'Y';
+
+        while (!found && another == 'Y') {
+
             System.out.print("\033[H\033[2J");
             System.out.flush();
-        }
-        System.out.println("---- RETURN BOOK -----");
-        System.out.println("Title Book :");
-        String title = scanner.nextLine();
-        System.out.println("");
+            if (user.getListPinjam().isEmpty()) {
+                System.out.println("---- ALERT ----");
+                System.out.println("YOU HAVE NOT BORROWED ANY BOOK");
+                pause.nextLine();
+                return;
+            }
+            System.out.println("---- RETURN BOOK -----");
+            System.out.println("Title Book :");
+            String title = scanner.nextLine();
+            System.out.println("");
 
-        for (Object buku : user.getListPinjam()) {
-            if (buku instanceof BukuFiksi) {
-                BukuFiksi book = (BukuFiksi) buku;
-                if (book.getJudul().equalsIgnoreCase(title)) {
-                    int date = ReturnDate();
-                    book.setTanggalKembali(date);
-                    user.deletePinjam(book);
-                    book.tampilkanInformasi();
-                    book.setBorrowedStock();
-                    found = true;
-                    break;
-                }
-            } else if (buku instanceof BukuNonFiksi) {
-                BukuNonFiksi book = (BukuNonFiksi) buku;
-                if (book.getJudul().equalsIgnoreCase(title)) {
-                    int date = ReturnDate();
+            for (Object buku : user.getListPinjam()) {
+                if (buku instanceof BukuFiksi) {
+                    BukuFiksi book = (BukuFiksi) buku;
+                    if (book.getJudul().equalsIgnoreCase(title)) {
+                        int date = ReturnDate();
+                        book.setTanggalKembali(date);
 
-                    book.setTanggalKembali(date);
-                    if (date > deadlineReturn) {
-                        book.setDenda();
+                        if (date > deadlineReturn) {
+                            paymnentDenda(book.getDenda());
+                        }
+
+                        user.deletePinjam(book);
+                        book.tampilkanInformasi();
+                        book.setBorrowedStock();
+                        found = true;
+                        break;
                     }
-                    user.deletePinjam(book);
-                    book.tampilkanInformasi();
-                    book.setBorrowedStock();
-                    found = true;
-                    break;
+                } else if (buku instanceof BukuNonFiksi) {
+                    BukuNonFiksi book = (BukuNonFiksi) buku;
+                    if (book.getJudul().equalsIgnoreCase(title)) {
+                        int date = ReturnDate();
+                        book.setTanggalKembali(date);
+
+                        if (date > deadlineReturn) {
+                            paymnentDenda(book.getDenda());
+                        }
+
+                        user.deletePinjam(book);
+                        book.tampilkanInformasi();
+                        book.setBorrowedStock();
+                        found = true;
+                        break;
+                    }
                 }
             }
-        }
-        if (!found) {
-            System.out.println("----ALERT----");
-            System.out.println("BOOK NOT FOUND");
+            if (!found) {
+                System.out.println("----ALERT----");
+                System.out.println("BOOK NOT FOUND");
+                System.out.println("Want to find another book? (Y/N)");
+                another = scanner.nextLine().toUpperCase().charAt(0);
+            } else {
+                break;
+            }
+
         }
         pause.nextLine();
     }
@@ -182,6 +214,8 @@ public class perpustakaan {
         double payment = 0;
         double change = 0;
         while (payment < denda) {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
             System.out.println("---- PENALTY PAYMENT ----");
             System.out.println("Penalty : " + denda);
             System.out.println("Money : ");

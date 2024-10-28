@@ -45,7 +45,8 @@ public class Buku {
     }
 
     public void tampilkanInformasi() {
-        System.out.println("---- BOOK INFORMATION ----");
+        System.out.println();
+        System.out.println("|---- BOOK INFORMATION ----|");
         System.out.println("Book title : " + this.Judul);
         System.out.println("Writer : " + this.Pengarang);
         System.out.println("Year of Publication : " + this.tahunTerbit);
@@ -92,7 +93,7 @@ public class Buku {
         return deadlineReturn;
     }
 
-    public double setDenda() {
+    public double getDenda() {
         this.denda = (this.tanggalKembali - this.tanggalPinjam) * this.dendaPerHari;
         return this.denda;
     }

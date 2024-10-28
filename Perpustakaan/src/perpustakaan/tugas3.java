@@ -81,7 +81,10 @@ public class tugas3 {
                     break;
                 case 3:
                     perpus.pinjamBuku(user);
-                    scanner.nextLine();
+                    break;
+                case 4:
+                    perpus.kembalikanBuku(user);
+                    break;
                 case 5:
                     break;
                 default:

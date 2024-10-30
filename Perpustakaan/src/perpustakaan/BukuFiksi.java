@@ -15,7 +15,7 @@ public class BukuFiksi extends Buku {
         System.out.println("Genre : " + this.genre);
     }
 
-    public String getGenre() {;
+    public String getGenre() {
         return genre;
     }
 

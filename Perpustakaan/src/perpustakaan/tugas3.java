@@ -8,13 +8,12 @@ public class tugas3 {
     public static void main(String[] args) {
 
         perpustakaan perpus = new perpustakaan();
-        //BOOK COLLECTION IN LIBARY
+
         BukuFiksi buku1 = new BukuFiksi("Singeki no Kyojin", "Hajime Isayama", 2011, "Political", 5000, 5);
         BukuNonFiksi buku2 = new BukuNonFiksi("Bumi itu bulat", "Issac Newton", 1912, "Science", 10000, 2);
         BukuFiksi buku3 = new BukuFiksi("Naruto Shippuden", "Masashi Kishimoto", 1999, "Shounen", 20000, 1);
         BukuNonFiksi buku4 = new BukuNonFiksi("Mindset", "Carol S Dewk", 2013, "Psikologi", 5000, 3);
 
-        //ADDING BOOK TO COLLECTION 
         perpus.tambahBuku(buku1);
         perpus.tambahBuku(buku3);
         perpus.tambahBuku(buku2);
@@ -58,7 +57,6 @@ public class tugas3 {
             System.out.println("4. Kembalikan Buku");
             System.out.println("5. Exit");
             while (true) {
-
                 try {
                     System.out.print("Choice : ");
                     choice = scanner.nextInt();
@@ -73,7 +71,6 @@ public class tugas3 {
                 case 1:
                     user.printBorrowedBook();
                     scanner.nextLine();
-
                     break;
                 case 2:
                     perpus.displayBook();
@@ -86,9 +83,12 @@ public class tugas3 {
                     perpus.kembalikanBuku(user);
                     break;
                 case 5:
+                    System.out.println("----- Thanks for using this library -----");
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Choice not avaiable");
+                    scanner.nextLine();
                     break;
             }
 

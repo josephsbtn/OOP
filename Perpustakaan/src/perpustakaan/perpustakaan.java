@@ -7,8 +7,6 @@ import java.util.Scanner;
 public class perpustakaan {
 
     private ArrayList<Object> Koleksi = new ArrayList<Object>();
-    Scanner scanner = new Scanner(System.in);
-    private Buku Book = null;
     private int borrowDate;
     private int returnDate;
     private int deadlineReturn;
@@ -23,6 +21,8 @@ public class perpustakaan {
 
     public void displayBook() {
         Scanner pause = new Scanner(System.in);
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
 
         System.out.println("|------ Book Collection ------|");
         for (Object buku : Koleksi) {
@@ -37,9 +37,12 @@ public class perpustakaan {
 
     public void pinjamBuku(User user) {
         Scanner pause = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         boolean found = false;
         char another = 'Y';
         while (!found && another == 'Y') {
+            found = false;
+            another = 'Y';
 
             System.out.print("\033[H\033[2J");
             System.out.flush();
@@ -54,19 +57,19 @@ public class perpustakaan {
                         if (book.getStock() == 0) {
                             System.out.println(("----ALERT----"));
                             System.out.println("Book is out of stock");
+                            pause.nextLine();
                             return;
                         }
                         int date = BorrowDate();
-                        deadlineReturn = date + 7;
                         book.setTanggalPinjam(date);
-                        book.setDeadlineReturn(deadlineReturn);
+                        book.setDeadlineReturn();
                         user.addPinjam(book);
                         System.out.print("\033[H\033[2J");
                         System.out.flush();
                         System.out.println("---- SUCCESSFULLY BORROWED ----");
                         System.out.println();
                         book.tampilkanInformasi();
-                        System.out.println("Deadline Return : " + deadlineReturn);
+                        System.out.println("Deadline Return : " + book.getDeadlineReturn());
                         book.setBorrowStock();
                         found = true;
                         break;
@@ -77,19 +80,18 @@ public class perpustakaan {
                         if (book.getStock() == 0) {
                             System.out.println(("----ALERT----"));
                             System.out.println("Book is out of stock");
+                            pause.nextLine();
                             return;
                         }
                         int date = BorrowDate();
-                        deadlineReturn = date + 7;
                         book.setTanggalPinjam(date);
-                        book.setDeadlineReturn(deadlineReturn);
+                        book.setDeadlineReturn();
                         user.addPinjam(book);
                         System.out.print("\033[H\033[2J");
                         System.out.flush();
                         System.out.println("---- SUCCESSFULLY BORROWED ----");
-                        System.out.println();
                         book.tampilkanInformasi();
-                        System.out.println("Deadline Return : " + deadlineReturn);
+                        System.out.println("Deadline Return : " + book.getDeadlineReturn());
                         book.setBorrowStock();
                         found = true;
                         break;
@@ -97,7 +99,6 @@ public class perpustakaan {
                 }
 
             }
-            System.out.println("CHECK FOUND BOOK" + found);
             if (!found) {
                 System.out.println("----ALERT----");
                 System.out.println("BOOK NOT FOUND");
@@ -109,10 +110,10 @@ public class perpustakaan {
             }
         }
 
-        pause.nextLine();
     }
 
     public void kembalikanBuku(User user) {
+        Scanner scanner = new Scanner(System.in);
         Scanner pause = new Scanner(System.in);
         boolean found = false;
         char another = 'Y';
@@ -130,38 +131,45 @@ public class perpustakaan {
             System.out.println("---- RETURN BOOK -----");
             System.out.println("Title Book :");
             String title = scanner.nextLine();
-            System.out.println("");
 
             for (Object buku : user.getListPinjam()) {
                 if (buku instanceof BukuFiksi) {
                     BukuFiksi book = (BukuFiksi) buku;
                     if (book.getJudul().equalsIgnoreCase(title)) {
+                        System.out.println("Borrow Date : " + book.getTanggalPinjam());
+                        System.out.println("Deadline Return : " + book.getDeadlineReturn());
                         int date = ReturnDate();
                         book.setTanggalKembali(date);
 
-                        if (date > deadlineReturn) {
-                            paymnentDenda(book.getDenda());
+                        if (date > book.getDeadlineReturn()) {
+                            paymnentDenda(book.getDenda(), book.getDeadlineReturn() - book.getTanggalKembali());
                         }
 
                         user.deletePinjam(book);
-                        book.tampilkanInformasi();
                         book.setBorrowedStock();
+                        System.out.println("--- BOOK HAS SUCCESSFULLY DELETED ---");
+                        book.tampilkanInformasi();
+
                         found = true;
                         break;
                     }
                 } else if (buku instanceof BukuNonFiksi) {
                     BukuNonFiksi book = (BukuNonFiksi) buku;
                     if (book.getJudul().equalsIgnoreCase(title)) {
+                        System.out.println("Borrow Date : " + book.getTanggalPinjam());
+                        System.out.println("Deadline Return : " + book.getDeadlineReturn());
                         int date = ReturnDate();
                         book.setTanggalKembali(date);
 
                         if (date > deadlineReturn) {
-                            paymnentDenda(book.getDenda());
+                            paymnentDenda(book.getDenda(), book.getTanggalKembali() - book.getDeadlineReturn());
                         }
 
                         user.deletePinjam(book);
-                        book.tampilkanInformasi();
                         book.setBorrowedStock();
+                        System.out.println("--- BOOK HAS SUCCESSFULLY DELETED ---");
+                        book.tampilkanInformasi();
+
                         found = true;
                         break;
                     }
@@ -173,52 +181,67 @@ public class perpustakaan {
                 System.out.println("Want to find another book? (Y/N)");
                 another = scanner.nextLine().toUpperCase().charAt(0);
             } else {
+                pause.nextLine();
                 break;
             }
 
         }
-        pause.nextLine();
+
     }
 
     private int BorrowDate() {
-        try {
-            System.out.println("Borrowing Date : ");
-            borrowDate = scanner.nextInt();
-            if (borrowDate < 1 || borrowDate > 31) {
-                throw new InputMismatchException();
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            try {
+                System.out.println("Borrowing Date : ");
+                borrowDate = scanner.nextInt();
+                if (borrowDate >= 1 && borrowDate <= 31) {
+                    break;
+                } else {
+                    System.out.println("INVALID INPUT DATE ( 1 - 31)!!");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("INVALID INPUT DATE ( 1 - 31)");
+                System.out.println("Borrowing Date : ");
+                scanner.next();
             }
-        } catch (InputMismatchException e) {
-            System.out.println("INVALID INPUT DATE ( 1 - 31)");
-            System.out.println("Borrowing Date : ");
-            scanner.next();
         }
+
         return borrowDate;
     }
 
     private int ReturnDate() {
-        try {
-            System.out.println("Return Date : ");
-            returnDate = scanner.nextInt();
-            if (returnDate > borrowDate && (returnDate < 1 || returnDate > 31)) {
-                throw new InputMismatchException();
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            try {
+                System.out.println("Return Date : ");
+                returnDate = scanner.nextInt();
+                if (returnDate >= borrowDate && returnDate <= 31 && returnDate > 0) {
+                    break;
+                } else {
+                    System.out.println("INVALID INPUT DATE ( 1 - 31)!!");
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("INVALID INPUT DATE ( 1 - 31)");
+                System.out.println("Return Date : ");
+                scanner.next();
             }
-        } catch (InputMismatchException e) {
-            System.out.println("INVALID INPUT DATE ( 1 - 31)");
-            System.out.println("Return Date : ");
-            scanner.next();
         }
         return returnDate;
     }
 
-    private void paymnentDenda(double denda) {
+    private void paymnentDenda(double denda, int dayLate) {
+        Scanner scanner = new Scanner(System.in);
         double payment = 0;
         double change = 0;
         while (payment < denda) {
             System.out.print("\033[H\033[2J");
             System.out.flush();
             System.out.println("---- PENALTY PAYMENT ----");
-            System.out.println("Penalty : " + denda);
-            System.out.println("Money : ");
+            System.out.println("Late Return Days : " + (dayLate));
+            System.out.println("Penalty : Rp " + denda);
+            System.out.print("Money : ");
             payment = scanner.nextDouble();
             if (payment < denda) {
                 System.out.println("MONEY NOT ENOUGH");

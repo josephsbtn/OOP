@@ -77,8 +77,12 @@ public class Buku {
         this.tanggalKembali = tanggalKembali;
     }
 
-    public void setDeadlineReturn(int deadlineReturn) {
-        this.deadlineReturn = deadlineReturn;
+    public void setDeadlineReturn() {
+        if (tanggalPinjam + 7 > 31) {
+            deadlineReturn = (tanggalPinjam + 7) - 31;
+        } else {
+            deadlineReturn = tanggalPinjam + 7;
+        }
     }
 
     public int getTanggalPinjam() {
@@ -94,7 +98,7 @@ public class Buku {
     }
 
     public double getDenda() {
-        this.denda = (this.tanggalKembali - this.tanggalPinjam) * this.dendaPerHari;
+        this.denda = (this.tanggalKembali - this.deadlineReturn) * this.dendaPerHari;
         return this.denda;
     }
 }
